@@ -50,8 +50,7 @@ class UserValidationDecorator extends \RedbeanValidation\ValidationDecorator
 `main.php`
 
 ```
-$user = R::dispense('user');
-$user = new UserValidationDecorator($user);
+$user = new UserValidationDecorator(R::dispense('user'));
 $user->first_name = 'John';
 $user->last_name = 'John';
 if($user->is_valid()) 
