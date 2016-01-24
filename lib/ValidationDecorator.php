@@ -18,10 +18,34 @@ class ValidationDecorator extends Decorator {
     private function _validate()
     {
         $validator = new Validations($this);
+        $validation_on = 'validation_on_' . ($this->is_new_record() ? 'create' : 'update');
+
+        foreach (array('before_validation', "before_{$validation_on}") as $callback)
+        {
+            if (!$this->invoke_callback($callback,false))
+                return false;
+        }
+
         // need to store reference b4 validating so that custom validators have access to add errors
         $this->errors = $validator->get_record();
         $validator->validate();
-        return $this->errors->is_empty();
+        foreach (array('after_validation', "after_{$validation_on}") as $callback)
+            $this->invoke_callback($callback,false);
+
+        if (!$this->errors->is_empty())
+            return false;
+
+        return true;
+    }
+
+    /**
+     * Determine if the model is a new record.
+     *
+     * @return boolean
+     */
+    public function is_new_record()
+    {
+        return $this->{get_primary_key()} === null;
     }
 
     /**
