@@ -55,7 +55,7 @@ $user->first_name = 'John';
 $user->last_name = 'John';
 if($user->is_valid()) 
 {
-	R::store($user);
+	R::store($user->object);
 }
 else
 {
