@@ -9,7 +9,6 @@ class ValidationDecorator extends Decorator {
      */
     public $errors;
     static $pk = 'id';
-    static $table;
 
     /**
      * Validates the model.
