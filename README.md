@@ -27,8 +27,8 @@ composer require xire28/redbean-validation
 class UserValidationDecorator extends \RedbeanValidation\ValidationDecorator
 {
     static $validates_length_of = [
-        ['first_name', 'within' => [10, 20]],
-        ['last_name', 'within' => [10, 20]]
+        ['first_name', 'within' => [5, 20]],
+        ['last_name', 'within' => [5, 20]]
     ];
 
     static $validates_uniqueness_of = [
@@ -63,3 +63,26 @@ else
 	var_dump($user->errors);
 }
 ```
+
+### Result 
+
+#### Note
+- A "John John" user exists in the database (created without using validations)
+
+```
+object(RedbeanValidation\Errors)[17]
+  private 'model' => null
+  private 'errors' => 
+    array (size=3)
+      'first_name' => 
+        array (size=2)
+          0 => string 'is too short (minimum is 10 characters)' (length=39)
+          1 => string 'can't be the same as last name' (length=30)
+      'last_name' => 
+        array (size=2)
+          0 => string 'is too short (minimum is 10 characters)' (length=39)
+          1 => string 'can't be the same as first name' (length=31)
+      'first_name_and_last_name' => 
+        array (size=1)
+          0 => string 'name already in use' (length=19)
+```    
