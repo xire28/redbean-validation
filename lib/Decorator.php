@@ -4,7 +4,7 @@ class Decorator {
   /**
    * @var
    */
-  protected $object;
+  public $object;
 
   /**
    * Class constructor.
