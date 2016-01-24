@@ -13,7 +13,7 @@ Php-activerecord validations for redbean using decorators
 ### Using Composer
 
 ```
-composer install xire28/redbean-validation
+composer require xire28/redbean-validation
 ```
 
 ## Example
