@@ -1,6 +1,6 @@
 <?php namespace RedbeanValidation;
 
-class ValidationDecorator extends Decorator {
+trait modelValidation {
 
     /**
      * An instance of {@link Errors} and will be instantiated once a write method is called.
@@ -22,15 +22,17 @@ class ValidationDecorator extends Decorator {
 
         foreach (array('before_validation', "before_{$validation_on}") as $callback)
         {
-            if (!$this->invoke_callback($callback,false))
-                return false;
+            if (method_exists($this, $callback) && !call_user_func(array($this, $callback))) return false;
         }
 
         // need to store reference b4 validating so that custom validators have access to add errors
         $this->errors = $validator->get_record();
         $validator->validate();
+
         foreach (array('after_validation', "after_{$validation_on}") as $callback)
-            $this->invoke_callback($callback,false);
+        {
+            if(method_exists($this, $callback)) call_user_func(array($this, $callback));
+        } 
 
         if (!$this->errors->is_empty())
             return false;
@@ -45,7 +47,7 @@ class ValidationDecorator extends Decorator {
      */
     public function is_new_record()
     {
-        return $this->{get_primary_key()} === null;
+        return $this->{$this->get_primary_key()} === null;
     }
 
     /**
@@ -111,6 +113,16 @@ class ValidationDecorator extends Decorator {
      */
     public function get_table_name()
     {
-        return $this->object->getMeta('type');
+        return $this->bean->getMeta('type');
+    }
+
+    /**
+     * Retrieves the errors
+     *
+     * @var \RedbeanValidation\Errors
+     */
+    public function errors()
+    {
+        return $this->errors;
     }
 }
