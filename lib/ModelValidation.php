@@ -1,6 +1,6 @@
 <?php namespace RedbeanValidation;
 
-trait modelValidation {
+trait ModelValidation {
 
     /**
      * An instance of {@link Errors} and will be instantiated once a write method is called.
